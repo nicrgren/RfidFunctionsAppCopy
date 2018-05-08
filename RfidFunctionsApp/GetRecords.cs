@@ -39,26 +39,25 @@ namespace RfidFunctionsApp
             dtSwipeRecords.Columns.Add("f_ControllerSN", System.Type.GetType("System.UInt32"));
             dtSwipeRecords.Columns.Add("f_RecordAll", System.Type.GetType("System.String"));
 
-            int num = -1;
-
-            using (wgMjControllerSwipeOperate swipe4GetRecords = new wgMjControllerSwipeOperate())
+            await Task.Run(() =>
             {
-                swipe4GetRecords.Clear();
-                num = swipe4GetRecords.GetSwipeRecords(controller.ControllerSN, controller.IP, controller.PORT, ref dtSwipeRecords);
-            }
-
-            if (num > 0)
-            {
-                wgMjControllerSwipeRecord mjrec = new wgMjControllerSwipeRecord();
-                for (int i = 0; i < num; i++)
+                int num = -1;
+                using (wgMjControllerSwipeOperate swipe4GetRecords = new wgMjControllerSwipeOperate())
                 {
-                    mjrec.Update(dtSwipeRecords.Rows[i]["f_RecordAll"] as string);
-                    log.Info(mjrec.CardID.ToString());
+                    swipe4GetRecords.Clear();
+                    num = swipe4GetRecords.GetSwipeRecords(controller.ControllerSN, controller.IP, controller.PORT, ref dtSwipeRecords);
                 }
-            } else
-            {
-                log.Error(num.ToString());
-            }
+
+                if (num > 0)
+                {
+                    wgMjControllerSwipeRecord mjrec = new wgMjControllerSwipeRecord();
+                    for (int i = 0; i < num; i++)
+                    {
+                        mjrec.Update(dtSwipeRecords.Rows[i]["f_RecordAll"] as string);
+                        log.Info(mjrec.CardID.ToString());
+                    }
+                }
+            });
 
             return req.CreateResponse(HttpStatusCode.OK);
         }
