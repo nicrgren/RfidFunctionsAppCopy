@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RfidFunctionsApp", "RfidFunctionsApp\RfidFunctionsApp.csproj", "{B08811FC-1C3B-48FD-A6D3-532D1A98699C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B08811FC-1C3B-48FD-A6D3-532D1A98699C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08811FC-1C3B-48FD-A6D3-532D1A98699C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08811FC-1C3B-48FD-A6D3-532D1A98699C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08811FC-1C3B-48FD-A6D3-532D1A98699C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB40CF06-A35D-4B15-9084-CF8C596763F4}
+	EndGlobalSection
+EndGlobal
