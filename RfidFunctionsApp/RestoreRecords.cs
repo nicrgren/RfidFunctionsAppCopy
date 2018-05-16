@@ -14,29 +14,49 @@ namespace RfidFunctionsApp
         [FunctionName("RestoreRecords")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            // Get request body
-            dynamic data = await req.Content.ReadAsAsync<object>();
+            // Serial Number
+            int serialNumber = 0;
+            foreach (string s in req.Headers.GetValues("X-M46-RFID-SN"))
+            {
+                serialNumber = int.Parse(s);
+            }
+
+            // IP
+            string ip = "";
+            foreach (string i in req.Headers.GetValues("X-M46-RFID-IP"))
+            {
+                ip = i;
+            }
+
+            // Port
+            int port = 60000;
+            foreach (string p in req.Headers.GetValues("X-M46-RFID-PORT"))
+            {
+                port = int.Parse(p);
+            }
 
             var controller = new wgMjController
             {
-                ControllerSN = (int)data?.serialNumber,
-                IP = data?.ip,
-                PORT = (int)data?.port
+                ControllerSN = serialNumber,
+                IP = ip,
+                PORT = port
             };
 
-            bool restored = await Task.Run(() =>
+            bool success = false;
+
+            await Task.Run(() =>
             {
-                return controller.RestoreAllSwipeInTheControllersIP() > 0;
+                success = controller.RestoreAllSwipeInTheControllersIP() > 0;
             });
 
-            if (restored)
+            if (success)
             {
-                return req.CreateResponse(HttpStatusCode.OK);
+                return req.CreateResponse(HttpStatusCode.OK, "Records restored");
             }
             else
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest, "Unable to restore swipe records");
+                return req.CreateResponse(HttpStatusCode.BadRequest, "Unable restore");
             }
         }
-        }
+    }
 }
