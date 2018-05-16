@@ -1,20 +1,22 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+
 using WG3000_COMM.Core;
 
 namespace RfidFunctionsApp
 {
-    public static class GetVersion
+    public static class AddCard
     {
-        [FunctionName("GetVersion")]
-        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequestMessage req, TraceWriter log)
+        [FunctionName("AddCard")]
+        public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
-            log.Info("Getting version...");
+            log.Info("C# HTTP trigger function processed a request.");
 
             // Serial Number
             int serialNumber = 0;
@@ -44,20 +46,31 @@ namespace RfidFunctionsApp
                 PORT = port
             };
 
+            MjRegisterCard card = new MjRegisterCard();
+
+            dynamic data = await req.Content.ReadAsAsync<object>();
+
+            card.CardID = data?.tag;
+            card.Password = 123456;
+            card.ymdStart = DateTime.Now;
+            card.ymdEnd = card.ymdStart.AddYears(10);
+            card.ControlSegIndexSet(1, 1);
+            card.ControlSegIndexSet(2, 1);
+
             bool success = false;
 
             await Task.Run(() =>
             {
-                success = controller.GetMjControllerRunInformationIP() > 0;
+                wgMjControllerPrivilege privilege = new wgMjControllerPrivilege();
+                success = privilege.AddPrivilegeOfOneCardIP(controller.ControllerSN, controller.IP, controller.PORT, card) > 0;
             });
-
+            
             if (success)
             {
-                return req.CreateResponse(HttpStatusCode.OK, controller.RunInfo.driverVersion);
-            }
-            else
+                return req.CreateResponse(HttpStatusCode.Accepted, $"Tag ({card.CardID}) added");
+            } else
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest, "Unable to get remote information");
+                return req.CreateResponse(HttpStatusCode.InternalServerError, "Unable to save card, please try again...");
             }
         }
     }
