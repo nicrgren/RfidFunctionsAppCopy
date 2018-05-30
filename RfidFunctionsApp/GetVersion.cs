@@ -53,7 +53,7 @@ namespace RfidFunctionsApp
 
             if (success)
             {
-                return req.CreateResponse(HttpStatusCode.OK, controller.RunInfo.driverVersion);
+                return req.CreateResponse(HttpStatusCode.OK, new { version = controller.RunInfo.driverVersion });
             }
             else
             {

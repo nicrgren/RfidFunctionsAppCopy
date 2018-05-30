@@ -60,7 +60,7 @@ namespace RfidFunctionsApp
 
             if (success)
             {
-                return req.CreateResponse(HttpStatusCode.OK, "Tag removed");
+                return req.CreateResponse(HttpStatusCode.OK, new { success = true, message = "Tag removed" });
             }
             else
             {

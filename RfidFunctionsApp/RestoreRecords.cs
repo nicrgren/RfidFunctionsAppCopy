@@ -51,7 +51,7 @@ namespace RfidFunctionsApp
 
             if (success)
             {
-                return req.CreateResponse(HttpStatusCode.OK, "Records restored");
+                return req.CreateResponse(HttpStatusCode.OK, new { success = true, message = "Records restored" });
             }
             else
             {

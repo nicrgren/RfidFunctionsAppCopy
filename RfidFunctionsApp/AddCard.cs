@@ -67,7 +67,7 @@ namespace RfidFunctionsApp
             
             if (success)
             {
-                return req.CreateResponse(HttpStatusCode.Accepted, $"Tag ({card.CardID}) added");
+                return req.CreateResponse(HttpStatusCode.Created, new { success = true, message = $"Tag ({card.CardID}) added" });
             } else
             {
                 return req.CreateResponse(HttpStatusCode.InternalServerError, "Unable to save card, please try again...");
