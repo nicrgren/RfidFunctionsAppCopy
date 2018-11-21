@@ -56,6 +56,9 @@ namespace RfidFunctionsApp
             card.ymdEnd = card.ymdStart.AddYears(10);
             card.ControlSegIndexSet(1, 1);
             card.ControlSegIndexSet(2, 1);
+            card.ControlSegIndexSet(3, 1);
+            card.ControlSegIndexSet(4, 1);
+
 
             bool success = false;
 
